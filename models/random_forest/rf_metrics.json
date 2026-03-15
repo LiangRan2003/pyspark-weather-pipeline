@@ -1,0 +1,10 @@
+{
+  "model": "RandomForestRegressor",
+  "selection": "2-fold CV",
+  "best_params": {
+    "numTrees": 50
+  },
+  "rmse_test": 3.6129,
+  "r2_test": 0.9173,
+  "data_split": "70/30"
+}

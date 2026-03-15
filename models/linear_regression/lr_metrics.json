@@ -1,0 +1,11 @@
+{
+  "model": "LinearRegression",
+  "selection": "2-fold CV",
+  "best_params": {
+    "regParam": 0.01,
+    "elasticNetParam": 0.0
+  },
+  "rmse_test": 5.1924,
+  "r2_test": 0.8292,
+  "data_split": "70/30"
+}

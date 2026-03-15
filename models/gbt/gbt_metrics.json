@@ -1,0 +1,10 @@
+{
+  "model": "GBTRegressor",
+  "selection": "2-fold CV",
+  "best_params": {
+    "numTrees": 50
+  },
+  "rmse_test": 3.4525,
+  "r2_test": 0.9245,
+  "data_split": "70/30"
+}
