@@ -38,6 +38,28 @@ def test_feature_importance_artifacts_are_sorted_and_normalized():
         assert abs(sum(values) - 1.0) < 1e-6
 
 
+def test_checked_in_model_artifacts_are_present_and_nonempty():
+    expected = [
+        ROOT / "models" / "linear_regression" / "linear_regression_coefficients.csv",
+        ROOT / "models" / "linear_regression" / "lr_residual_plot.png",
+        ROOT / "models" / "linear_regression" / "lr_training_curve.png",
+        ROOT / "models" / "gbt" / "best_gbt_weather_model_final" / "metadata" / "part-00000",
+    ]
+
+    for path in expected:
+        assert path.is_file(), f"missing artifact: {path}"
+        assert path.stat().st_size > 0, f"empty artifact: {path}"
+
+
+def test_feature_names_are_unique_in_importance_artifacts():
+    for path in [
+        ROOT / "models" / "gbt" / "gbt_importances.csv",
+        ROOT / "models" / "random_forest" / "random_forest_importances.csv",
+    ]:
+        names = [row["Feature"] for row in csv.DictReader(path.open(newline=""))]
+        assert len(names) == len(set(names))
+
+
 def test_gcs_helpers_upload_expected_payloads(monkeypatch):
     uploads = []
 
@@ -123,3 +145,4 @@ def test_gcs_helpers_upload_expected_payloads(monkeypatch):
 
     assert ("string", "metrics.txt", "hello") in uploads
     assert any(item[0:3] == ("file", "plot.png", "image/png") and item[3] > 0 for item in uploads)
+    assert not plt.fignum_exists(fig.number)

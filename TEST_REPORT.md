@@ -1,37 +1,29 @@
-# Test Report
+# 测试报告
 
-## Summary
+## 测试结论
 
-Added a pytest suite for the PySpark weather-prediction project focused on reproducible artifacts and cloud-output helper behavior. The tests avoid starting Spark or accessing Google Cloud by validating checked-in results and mocking GCS uploads.
+已为 PySpark 天气预测项目建立模型产物与云输出边界测试。测试不启动 Spark、不访问 Google Cloud，直接验证仓库内可复现成果，并用 mock 检查 GCS 上传行为。
 
-## What Is Covered
+## 覆盖范围
 
-- Model metric JSON files are valid and contain sane RMSE/R2 values.
-- Reported model ranking is consistent:
-  - GBT beats Random Forest.
-  - Random Forest beats Linear Regression.
-- Feature-importance CSV files are sorted descending.
-- Feature importances are normalized to approximately 1.0.
-- GCS helper functions upload text and plot payloads with the expected object names and content types.
+- 三类模型指标 JSON 可解析，RMSE、R2 和数据切分字段合理。
+- 验证 GBT、随机森林、线性回归的报告排名一致。
+- 两份特征重要性 CSV 按降序排列、总和归一且特征名不重复。
+- 关键模型、系数和图表产物存在且非空。
+- 文本和 PNG 图表上传使用正确对象名、内容类型和有效载荷。
+- 图表上传完成后关闭 figure，避免批处理时内存累积。
 
-## Why This Matters
+## 成果价值
 
-The full training pipeline requires Spark, GCS, and a large weather dataset. These tests verify the project artifacts that communicate model quality, and they check the cloud-output boundary without needing real cloud credentials.
+完整训练依赖 Spark、GCS 和大规模天气数据。这组测试在轻量环境中验证仓库展示的模型成果没有缺失或自相矛盾，同时保护云输出接口，适合日常开发和 CI 快速执行。
 
-## Verification
+## 验证方式
 
-Command:
+    python -m pytest -q
 
-```powershell
-python -m pytest -q
-```
+测试结果：5 passed
 
-Result:
+## 测试文件
 
-```text
-3 passed
-```
+- tests/test_artifacts_and_helpers.py
 
-## Files Added
-
-- `tests/test_artifacts_and_helpers.py`
